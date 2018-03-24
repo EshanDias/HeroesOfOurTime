@@ -111,7 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //region CRUD Operations - Hero Table
 
     public long insertHero(Hero hero) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(HERO_NAME, hero.getName());
@@ -166,7 +166,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cur = db.rawQuery(query, null);
 
-        if (cur != null) {
+        if (cur != null && !cur.isClosed()) {
             cur.moveToFirst();
             do {
                 Hero hero = new Hero();
@@ -180,11 +180,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 hero.setModifiedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_MODIFIED_DATE))));
                 hero.setCreatedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_CREATED_DATE))));
 
-                cur.close();
                 heroList.add(hero);
             } while (cur.moveToNext());
         }
-
+        cur.close();
         return heroList;
     }
 

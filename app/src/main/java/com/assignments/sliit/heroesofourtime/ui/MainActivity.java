@@ -26,8 +26,10 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(getApplicationContext());
 
         //Creating Heroes
-        Hero hero = new Hero("Eshan Dias");
-        Hero hero2 = new Hero("Super Man");
+        Hero hero = new Hero("STEVE JOBS");
+        Hero hero2 = new Hero("NELSON MANDELA");
+        Hero hero3 = new Hero("STEPHEN HAWKING");
+
 
         //Insert Hero to the db
         long heroId = db.insertHero(hero);
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         if (hero2Id > 0) {
             Log.e(TAG, "Hero2 Successfully Saved");
         }
+        long hero3Id = db.insertHero(hero3);
 
         List<Hero> heroList = db.getHeroes();
 
@@ -57,8 +60,7 @@ public class MainActivity extends AppCompatActivity {
             ListView lv = findViewById(R.id.listView);
 
             lv.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
-
-
     }
 }

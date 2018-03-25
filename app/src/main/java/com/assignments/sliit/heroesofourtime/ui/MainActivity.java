@@ -10,6 +10,7 @@ import com.assignments.sliit.heroesofourtime.R;
 import com.assignments.sliit.heroesofourtime.dbAccess.DatabaseHelper;
 import com.assignments.sliit.heroesofourtime.model.Hero;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,25 +24,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = new DatabaseHelper(getApplicationContext());
+        db = new DatabaseHelper(getApplicationContext(), getFilesDir().getAbsolutePath());
+
+        try {
+            db.prepareDatabase();
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+            e.printStackTrace();
+        }
 
         //Creating Heroes
-        Hero hero = new Hero("STEVE JOBS");
-        Hero hero2 = new Hero("NELSON MANDELA");
-        Hero hero3 = new Hero("STEPHEN HAWKING");
-
-
-        //Insert Hero to the db
-        long heroId = db.insertHero(hero);
-        if (heroId > 0) {
-            Log.e(TAG, "Hero1 Successfully Saved");
-        }
-
-        long hero2Id = db.insertHero(hero2);
-        if (hero2Id > 0) {
-            Log.e(TAG, "Hero2 Successfully Saved");
-        }
-        long hero3Id = db.insertHero(hero3);
+//        Hero hero = new Hero("STEVE JOBS");
+//        Hero hero2 = new Hero("NELSON MANDELA");
+//        Hero hero3 = new Hero("STEPHEN HAWKING");
+//
+//
+//        //Insert Hero to the db
+//        long heroId = db.insertHero(hero);
+//        if (heroId > 0) {
+//            Log.e(TAG, "Hero1 Successfully Saved");
+//        }
+//
+//        long hero2Id = db.insertHero(hero2);
+//        if (hero2Id > 0) {
+//            Log.e(TAG, "Hero2 Successfully Saved");
+//        }
+//        long hero3Id = db.insertHero(hero3);
 
         List<Hero> heroList = db.getHeroes();
 

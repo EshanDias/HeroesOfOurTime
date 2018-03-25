@@ -3,12 +3,19 @@ package com.assignments.sliit.heroesofourtime.dbAccess;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.assignments.sliit.heroesofourtime.model.Hero;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +30,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Logcat TAG
     private static final String TAG = "DatabaseHelper";
+    private final Context myContext;
+    private String pathToSaveDBFile;
 
     //region Database Info
     private static final String DATABASE_NAME = "HeroesOfOurTime";
@@ -80,24 +89,95 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //endregion
 
     //region Database CRUD Operation Methods
-    public DatabaseHelper(Context context) {
+    public DatabaseHelper(Context context, String filePath) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.myContext = context;
+        pathToSaveDBFile = filePath + "/" + DATABASE_NAME;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_HERO);
-        Log.e(TAG, CREATE_TABLE_HERO);
-        db.execSQL(CREATE_TABLE_LOGIN);
-        Log.e(TAG, CREATE_TABLE_LOGIN);
+//        db.execSQL(CREATE_TABLE_HERO);
+//        Log.e(TAG, CREATE_TABLE_HERO);
+//        db.execSQL(CREATE_TABLE_LOGIN);
+//        Log.e(TAG, CREATE_TABLE_LOGIN);
+
+        Log.d(TAG, "OnCreate");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HERO);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HERO);
+//
+//        onCreate(db);
+    }
 
-        onCreate(db);
+    private int getVersionId() {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
+//        String query = "SELECT version_id FROM dbVersion";
+//        Cursor cursor = db.rawQuery(query, null);
+//        cursor.moveToFirst();
+//        int v =  cursor.getInt(0);
+//        cursor.close();
+        int v = db.getVersion();
+        db.close();
+        return v;
+    }
+
+    public void prepareDatabase() throws IOException {
+        boolean dbExist = checkDataBase();
+        if(dbExist) {
+            Log.d(TAG, "Database exists.");
+            int currentDBVersion = getVersionId();
+            if (DATABASE_VERSION > currentDBVersion) {
+                Log.d(TAG, "Database version is higher than old.");
+                deleteDb();
+                try {
+                    copyDataBase();
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        } else {
+            try {
+                copyDataBase();
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }
+    }
+
+    private boolean checkDataBase() {
+        boolean checkDB = false;
+        try {
+            File file = new File(pathToSaveDBFile);
+            checkDB = file.exists();
+        } catch(SQLiteException e) {
+            Log.d(TAG, e.getMessage());
+        }
+        return checkDB;
+    }
+
+    private void copyDataBase() throws IOException {
+        OutputStream os = new FileOutputStream(pathToSaveDBFile);
+        InputStream is = myContext.getAssets().open(DATABASE_NAME);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = is.read(buffer)) > 0) {
+            os.write(buffer, 0, length);
+        }
+        is.close();
+        os.flush();
+        os.close();
+    }
+
+    public void deleteDb() {
+        File file = new File(pathToSaveDBFile);
+        if(file.exists()) {
+            file.delete();
+            Log.d(TAG, "Database deleted.");
+        }
     }
 
     // Closing Database
@@ -111,7 +191,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //region CRUD Operations - Hero Table
 
     public long insertHero(Hero hero) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null,
+                SQLiteDatabase.OPEN_READWRITE);
 
         ContentValues values = new ContentValues();
         values.put(HERO_NAME, hero.getName());
@@ -124,12 +205,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(HERO_CREATED_DATE, String.valueOf(Calendar.getInstance().getTime()));
 
         //insert row
-        return db.insert(TABLE_HERO, HERO_DEATH, values);
+        long id = db.insert(TABLE_HERO, null, values);
+
+        db.close();
+        return id;
     }
 
     public Hero getHeroByTag (Object key) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null,
+                SQLiteDatabase.OPEN_READONLY);
+        Hero hero = null;
         String query = SelectByTagQuery(TABLE_HERO, HERO_ID, key);
 
         Log.e(TAG, query);
@@ -139,7 +224,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cur != null) {
             cur.moveToFirst();
 
-            Hero hero = new Hero();
+            hero = new Hero();
             hero.setHeroID(cur.getInt(cur.getColumnIndex(HERO_ID)));
             hero.setName(cur.getString(cur.getColumnIndex(HERO_NAME)));
             hero.setBirthday(new Date(cur.getLong(cur.getColumnIndex(HERO_BIRTHDAY))));
@@ -151,39 +236,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             hero.setCreatedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_CREATED_DATE))));
 
             cur.close();
-            return hero;
-        } else {
-            return null;
         }
+
+        db.close();
+        return hero;
     }
 
     public List<Hero> getHeroes() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null,
+                SQLiteDatabase.OPEN_READONLY);
         List<Hero> heroList = new ArrayList<>();
         String query = SelectAllQuery(TABLE_HERO);
-
+query = "SELECT name FROM sqlite_master WHERE type='table'";
         Log.e(TAG, query);
 
-        Cursor cur = db.rawQuery(query, null);
+        Cursor cur = null;
+        try {
+            cur = db.rawQuery(query, null);
+        } catch (SQLException e) {
+            Log.e(TAG, e.getMessage());
+        }
 
         if (cur != null && !cur.isClosed()) {
             cur.moveToFirst();
-            do {
-                Hero hero = new Hero();
-                hero.setHeroID(cur.getInt(cur.getColumnIndex(HERO_ID)));
-                hero.setName(cur.getString(cur.getColumnIndex(HERO_NAME)));
-                hero.setBirthday(new Date(cur.getLong(cur.getColumnIndex(HERO_BIRTHDAY))));
-                hero.setDeath(new Date(cur.getLong(cur.getColumnIndex(HERO_DEATH))));
-                hero.setSummary(cur.getString(cur.getColumnIndex(HERO_SUMMARY)));
-                hero.setDescription(cur.getString(cur.getColumnIndex(HERO_DESCRIPTION)));
-                hero.setComments(cur.getString(cur.getColumnIndex(HERO_COMMENTS)));
-                hero.setModifiedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_MODIFIED_DATE))));
-                hero.setCreatedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_CREATED_DATE))));
-
-                heroList.add(hero);
-            } while (cur.moveToNext());
+                while (!cur.isAfterLast()) {
+//                    Hero hero = new Hero();
+//                    hero.setHeroID(cur.getInt(cur.getColumnIndex(HERO_ID)));
+//                    hero.setName(cur.getString(cur.getColumnIndex(HERO_NAME)));
+//                    hero.setBirthday(new Date(cur.getLong(cur.getColumnIndex(HERO_BIRTHDAY))));
+//                    hero.setDeath(new Date(cur.getLong(cur.getColumnIndex(HERO_DEATH))));
+//                    hero.setSummary(cur.getString(cur.getColumnIndex(HERO_SUMMARY)));
+//                    hero.setDescription(cur.getString(cur.getColumnIndex(HERO_DESCRIPTION)));
+//                    hero.setComments(cur.getString(cur.getColumnIndex(HERO_COMMENTS)));
+//                    hero.setModifiedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_MODIFIED_DATE))));
+//                    hero.setCreatedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_CREATED_DATE))));
+//
+//                    heroList.add(hero);
+                    String a = cur.getString(0);
+                    Log.e(TAG,cur.getString(0));
+                }
+            cur.close();
         }
-        cur.close();
+        else {
+            heroList = null;
+        }
+
+        db.close();
         return heroList;
     }
 

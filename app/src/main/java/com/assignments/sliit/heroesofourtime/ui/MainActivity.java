@@ -1,5 +1,6 @@
 package com.assignments.sliit.heroesofourtime.ui;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,9 +27,10 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(getApplicationContext());
 
         //Creating Heroes
-        Hero hero = new Hero("STEVE JOBS");
-        Hero hero2 = new Hero("NELSON MANDELA");
-        Hero hero3 = new Hero("STEPHEN HAWKING");
+        //Hero (String name, Date birthdate, Date death, String summary, String description, Drawable image)
+        Hero hero = new Hero("STEVE JOBS",null,null,"aaaaaaa","dddddd", getResources().getDrawable(R.drawable.steve_jobs_1955_2011_300x200));
+        Hero hero2 = new Hero("NELSON MANDELA",null,null,"aaaaaaa","dddddd", getResources().getDrawable(R.drawable.nelson_mandela_1918_2013_300x294));
+        Hero hero3 = new Hero("STEPHEN HAWKING",null,null,"aaaaaaa","dddddd", getResources().getDrawable(R.drawable.stephen_hawking_1942_present_300x200));
 
 
         //Insert Hero to the db

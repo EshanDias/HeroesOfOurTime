@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.assignments.sliit.heroesofourtime.core.ImageHelper;
 import com.assignments.sliit.heroesofourtime.model.Hero;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //region Database Info
     private static final String DATABASE_NAME = "HeroesOfOurTime";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     //Table Names
     private static final String TABLE_HERO = "Hero";
@@ -42,6 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String HERO_COMMENTS = "Comments";
     private static final String HERO_CREATED_DATE = "CreatedDate";
     private static final String HERO_MODIFIED_DATE = "ModifiedDate";
+    private static final String HERO_IMAGE = "HeroImage";
 
     //Columns - Login Table
     private static final String LOGIN_ID = "ID";
@@ -63,7 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + HERO_DESCRIPTION      + " TEXT"                                       + ", "
             + HERO_COMMENTS         + " TEXT"                                       + ", "
             + HERO_CREATED_DATE     + " DATETIME"                                   + ", "
-            + HERO_MODIFIED_DATE    + " DATETIME"
+            + HERO_MODIFIED_DATE    + " DATETIME"                                   + ", "
+            + HERO_IMAGE            + " TEXT"
             + ")";
 
     private static final String CREATE_TABLE_LOGIN = "CREATE TABLE " + TABLE_LOGIN + " ("
@@ -90,6 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.e(TAG, CREATE_TABLE_HERO);
         db.execSQL(CREATE_TABLE_LOGIN);
         Log.e(TAG, CREATE_TABLE_LOGIN);
+
     }
 
     @Override
@@ -112,7 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public long insertHero(Hero hero) {
         SQLiteDatabase db = this.getWritableDatabase();
-
+        ImageHelper imageHelper = new ImageHelper();
         ContentValues values = new ContentValues();
         values.put(HERO_NAME, hero.getName());
         values.put(HERO_BIRTHDAY, String.valueOf(hero.getBirthday()));
@@ -122,6 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(HERO_COMMENTS, hero.getComments());
         values.put(HERO_MODIFIED_DATE, String.valueOf(Calendar.getInstance().getTime()));
         values.put(HERO_CREATED_DATE, String.valueOf(Calendar.getInstance().getTime()));
+        values.put(HERO_IMAGE, imageHelper.insetImage(hero.getHeroImage()));
 
         //insert row
         return db.insert(TABLE_HERO, HERO_DEATH, values);

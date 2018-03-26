@@ -17,7 +17,7 @@
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".ui.HomePageActivity">
+        <activity android:name=".ui.WelcomePageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

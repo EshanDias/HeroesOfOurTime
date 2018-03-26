@@ -1,5 +1,9 @@
 package com.assignments.sliit.heroesofourtime.model;
 
+import android.graphics.drawable.Drawable;
+import android.text.method.DateTimeKeyListener;
+
+import java.sql.Blob;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,6 +23,7 @@ public class Hero {
     private String Comments;
     private Date CreatedDate;
     private Date ModifiedDate;
+    private Drawable HeroImage;
 
     public Hero (){
         Name = "";
@@ -40,6 +45,18 @@ public class Hero {
         Comments = "";
         ModifiedDate = Calendar.getInstance().getTime();
         CreatedDate = Calendar.getInstance().getTime();
+    }
+
+    public Hero (String name, Date birthdate, Date death, String summary, String description, Drawable image){
+        Name = name;
+        Birthday = birthdate;
+        Death = death;
+        Summary = summary;
+        Description = description;
+        Comments = "";
+        ModifiedDate = Calendar.getInstance().getTime();
+        CreatedDate = Calendar.getInstance().getTime();
+        HeroImage = image;
     }
 
     public String getName() {
@@ -121,5 +138,12 @@ public class Hero {
         cal.setTime(Birthday);
         age =  currentYear - cal.get(Calendar.YEAR);
         return age;
+    }
+    public Drawable getHeroImage() {
+        return HeroImage;
+    }
+
+    public void setHeroImage(Drawable heroImage) {
+        HeroImage = heroImage;
     }
 }

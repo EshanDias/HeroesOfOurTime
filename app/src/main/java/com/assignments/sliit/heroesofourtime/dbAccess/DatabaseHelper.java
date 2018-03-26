@@ -277,7 +277,8 @@ query = "SELECT name FROM sqlite_master WHERE type='table'";
                 }
             cur.close();
         }
-        else {
+
+        if(heroList.isEmpty()){
             heroList = null;
         }
 

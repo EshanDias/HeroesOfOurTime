@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.assignments.sliit.heroesofourtime.R;
+import com.assignments.sliit.heroesofourtime.core.ImageTextList;
 import com.assignments.sliit.heroesofourtime.dbAccess.DatabaseHelper;
 import com.assignments.sliit.heroesofourtime.model.Hero;
 
@@ -36,12 +37,17 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             List<String> heroes = new ArrayList<>();
+            List<Drawable> images = new ArrayList<>();
             for (Hero h : heroList) {
                 heroes.add(h.getName());
+                images.add(h.getHeroImage());
             }
+
+//            ImageTextList adapter = new ImageTextList(MainActivity.this, heroes, images);
+
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, heroes);
 
-            ListView lv = findViewById(R.id.listView);
+            ListView lv = findViewById(R.id.heroListView);
 
             lv.setAdapter(adapter);
             adapter.notifyDataSetChanged();

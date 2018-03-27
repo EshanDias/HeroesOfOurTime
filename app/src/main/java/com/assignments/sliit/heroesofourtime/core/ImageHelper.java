@@ -11,6 +11,7 @@ import static android.content.ContentValues.TAG;
 
 /**
  * Created by ASUS on 3/26/2018.
+ *
  */
 
 public class ImageHelper {
@@ -18,12 +19,18 @@ public class ImageHelper {
     private static final String TAG = "ImageHelper";
     //This will convert the Drawable image to a byte array
     public byte[] insetImage(Drawable dbDrawable)  {
-        Log.e(TAG, "inside image helper");
-        Bitmap bitmap = ((BitmapDrawable)dbDrawable).getBitmap();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
+        Bitmap bitmap;
+        ByteArrayOutputStream stream;
+        byte[] image = null;
 
+        if (dbDrawable != null) {
+            Log.d(TAG, "inside image helper");
+            bitmap = ((BitmapDrawable)dbDrawable).getBitmap();
+            stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            image = stream.toByteArray();
+        }
 
+        return image;
     }
 }

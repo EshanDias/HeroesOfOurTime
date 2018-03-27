@@ -3,16 +3,14 @@ package com.assignments.sliit.heroesofourtime.dbAccess;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.assignments.sliit.heroesofourtime.R;
 import com.assignments.sliit.heroesofourtime.core.ImageHelper;
 import com.assignments.sliit.heroesofourtime.model.Hero;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,10 +25,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Logcat TAG
     private static final String TAG = "DatabaseHelper";
+    private Context myContext;
 
     //region Database Info
     private static final String DATABASE_NAME = "HeroesOfOurTime";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
     //Table Names
     private static final String TABLE_HERO = "Hero";
@@ -84,11 +83,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ")";
 
     //endregion
-    Context context;
+
     //region Database CRUD Operation Methods
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
+        this.myContext = context;
     }
 
     @Override
@@ -98,37 +97,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_LOGIN);
         Log.e(TAG, CREATE_TABLE_LOGIN);
 
-        //Creating Heroes
-        //Hero (String name, Date birthdate, Date death, String summary, String description, Drawable image)
-        Hero hero = new Hero("NELSON MANDELA", null,null,"aaaa","cdc", context.getResources().getDrawable(R.drawable.nelson_mandela_1918_2013_300x294));
-        Hero hero2 = new Hero("STEPHEN HAWKING",null,null,"bbbb","ffff", context.getResources().getDrawable(R.drawable.stephen_hawking_1942_present_300x200));
-        Hero hero3 = new Hero("STEVE JOBS",null,null,"cccc","gghj",context.getResources().getDrawable(R.drawable.steve_jobs_1955_2011_300x200));
-        //Hero hero4 = new Hero("BILL GATES");
-
-        //Insert Hero to the db
-        long heroId = insertHero(hero,db);
-        if (heroId > 0) {
-            Log.e(TAG, "Hero1 Successfully Saved");
-        }
-        long hero2Id = insertHero(hero2,db);
-        if (hero2Id > 0) {
-            Log.e(TAG, "Hero2 Successfully Saved");
-        }
-        long hero3Id = insertHero(hero3,db);
-        if (hero3Id > 0) {
-            Log.e(TAG, "Hero3 Successfully Saved");
-        }
-//        long hero4Id = insertHero(hero4,db);
-//        if (hero4Id > 0) {
-//            Log.e(TAG, "Hero4 Successfully Saved");
-//        }
-
+        seedData(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HERO);
+        if (oldVersion < newVersion) {
+            db.execSQL(String.format("DROP TABLE IF EXISTS %s", TABLE_LOGIN));
+            db.execSQL(String.format("DROP TABLE IF EXISTS %s", TABLE_HERO));
+        }
 
         onCreate(db);
     }
@@ -139,13 +116,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (db != null && db.isOpen())
             db.close();
     }
-    //endregion
+
+    private void seedData(SQLiteDatabase db) {
+        InitialData initialData = new InitialData(myContext);
+        List<Hero> heroList = initialData.getHeroes();
+
+        for(Hero hero: heroList) {
+            insertHero(db, hero);
+        }
+    }
+
+    //endregion Database CRUD
 
     //region CRUD Operations - Hero Table
 
-    public long insertHero(Hero hero,SQLiteDatabase db) {
-        //SQLiteDatabase db = this.getWritableDatabase();
+    private void insertHero(SQLiteDatabase db, Hero hero) {
         ImageHelper imageHelper = new ImageHelper();
+
         ContentValues values = new ContentValues();
         values.put(HERO_NAME, hero.getName());
         values.put(HERO_BIRTHDAY, String.valueOf(hero.getBirthday()));
@@ -158,7 +145,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(HERO_IMAGE, imageHelper.insetImage(hero.getHeroImage()));
 
         //insert row
-        return db.insert(TABLE_HERO, HERO_DEATH, values);
+        try {
+            db.insert(TABLE_HERO, HERO_DEATH, values);
+        } catch (SQLException e) {
+            Log.e(TAG, "Hero Name: " + hero.getName() + "\n" + e.getMessage());
+        }
     }
 
     public Hero getHeroByTag (Object key) {

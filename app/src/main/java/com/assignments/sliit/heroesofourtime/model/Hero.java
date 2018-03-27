@@ -26,14 +26,7 @@ public class Hero {
     private Drawable HeroImage;
 
     public Hero (){
-        Name = "";
-        Birthday = Calendar.getInstance().getTime();
-        Death = null;
-        Summary = "";
-        Description = "";
-        Comments = "";
         ModifiedDate = Calendar.getInstance().getTime();
-        CreatedDate = Calendar.getInstance().getTime();
     }
 
     public Hero (String name){

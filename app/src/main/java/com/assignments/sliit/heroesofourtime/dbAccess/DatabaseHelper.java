@@ -142,7 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(HERO_COMMENTS, hero.getComments());
         values.put(HERO_MODIFIED_DATE, String.valueOf(Calendar.getInstance().getTime()));
         values.put(HERO_CREATED_DATE, String.valueOf(Calendar.getInstance().getTime()));
-        values.put(HERO_IMAGE, imageHelper.insetImage(hero.getHeroImage()));
+        //values.put(HERO_IMAGE, imageHelper.insetImage(hero.getHeroImage()));
 
         //insert row
         try {

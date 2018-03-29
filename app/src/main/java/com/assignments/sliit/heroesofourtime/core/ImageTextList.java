@@ -2,6 +2,7 @@ package com.assignments.sliit.heroesofourtime.core;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import com.assignments.sliit.heroesofourtime.R;
 
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by esh_d on 28/03/2018.
  *
@@ -21,13 +24,13 @@ import java.util.List;
 public class ImageTextList extends ArrayAdapter<String>{
     private final Activity context;
     private final List<String> heroes;
-    private final List<Drawable> imageId;
+    private final Integer[] imageId;
 
-    public ImageTextList(Activity context, List<String> heroes, List<Drawable> images) {
+    public ImageTextList(Activity context, List<String> heroes, Integer[] imageId) {
         super(context, R.layout.list_view_row_image_text, heroes);
         this.context = context;
         this.heroes = heroes;
-        this.imageId = images;
+        this.imageId = imageId;
     }
 
     @Override
@@ -41,9 +44,12 @@ public class ImageTextList extends ArrayAdapter<String>{
 
         txtTitle.setText(heroes.get(position));
 
-        imageView.setImageResource(Integer.parseInt((imageId.get(position)).toString()));
+        //imageView.setImageResource(Integer.parseInt((imageId.get(position)).toString()));
 
-        imageView.setImageResource(R.drawable.stephen_hawking_1942_present_300x200);
+        //imageView.setImageResource(R.drawable.stephen_hawking);
+
+        Log.e(TAG,"iamgeId: "+imageId[position]);
+        imageView.setImageResource(imageId[position]);
 
         return rowView;
     }

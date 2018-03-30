@@ -44,11 +44,6 @@ public class ImageTextList extends ArrayAdapter<String>{
 
         txtTitle.setText(heroes.get(position));
 
-        //imageView.setImageResource(Integer.parseInt((imageId.get(position)).toString()));
-
-        //imageView.setImageResource(R.drawable.stephen_hawking);
-
-        Log.e(TAG,"iamgeId: "+imageId[position]);
         imageView.setImageResource(imageId[position]);
 
         return rowView;

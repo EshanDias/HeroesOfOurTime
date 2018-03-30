@@ -1,5 +1,6 @@
 package com.assignments.sliit.heroesofourtime.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.steve_jobs,R.drawable.oprah_winfrey,R.drawable.warren_buffett,R.drawable.bill_gates,
             R.drawable.pele,R.drawable.angela_merkel,R.drawable.mark_zuckerberg,};
     ListView list;
+    List<Hero> heroList;
+    List<String> heroNameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,23 +34,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         db = new DatabaseHelper(getApplicationContext());
-
-        List<Hero> heroList = db.getHeroes();
-
+        heroList = db.getHeroes();
         db.closeDB();
+        heroNameList = new ArrayList<>(heroList.size());
 
         if (heroList == null) {
             Log.e(TAG, "No Heroes");
-        }
-        else {
-            final List<String> heroes = new ArrayList<>();
-
+        } else {
             for (Hero h : heroList) {
-                heroes.add(h.getName());
-
+                heroNameList.add(h.getName());
             }
 
-            ImageTextList adapter = new ImageTextList(MainActivity.this, heroes, imageRes);
+            ImageTextList adapter = new ImageTextList(MainActivity.this, heroNameList, imageRes);
             list = findViewById(R.id.heroListView);
             list.setAdapter(adapter);
 
@@ -56,8 +54,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    Toast.makeText(MainActivity.this, "You Clicked at " + heroes.get(position), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "You Clicked at " + heroNameList.get(position), Toast.LENGTH_SHORT).show();
 
+                    Intent intent = new Intent(MainActivity.this, HeroProfileActivity.class);
+                    intent.putExtra("HeroID", position+1);
+                    MainActivity.this.startActivity(intent);
                 }
             });
         }

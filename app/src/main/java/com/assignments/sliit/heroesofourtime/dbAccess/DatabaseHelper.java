@@ -59,27 +59,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Table Create Statements
     private static final String CREATE_TABLE_HERO = "CREATE TABLE " + TABLE_HERO + " ("
-            + HERO_ID               + " INTEGER PRIMARY KEY AUTOINCREMENT"          + ", "
-            + HERO_NAME             + " TEXT"                                       + ", "
-            + HERO_BIRTHDAY         + " DATETIME"                                   + ", "
-            + HERO_DEATH            + " DATETIME"                                   + ", "
-            + HERO_SUMMARY          + " TEXT"                                       + ", "
-            + HERO_DESCRIPTION      + " TEXT"                                       + ", "
-            + HERO_COMMENTS         + " TEXT"                                       + ", "
-            + HERO_CREATED_DATE     + " DATETIME"                                   + ", "
-            + HERO_MODIFIED_DATE    + " DATETIME"                                   + ", "
-            + HERO_IMAGE            + " TEXT"
+            + HERO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "
+            + HERO_NAME + " TEXT" + ", "
+            + HERO_BIRTHDAY + " DATETIME" + ", "
+            + HERO_DEATH + " DATETIME" + ", "
+            + HERO_SUMMARY + " TEXT" + ", "
+            + HERO_DESCRIPTION + " TEXT" + ", "
+            + HERO_COMMENTS + " TEXT" + ", "
+            + HERO_CREATED_DATE + " DATETIME" + ", "
+            + HERO_MODIFIED_DATE + " DATETIME" + ", "
+            + HERO_IMAGE + " TEXT"
             + ")";
 
     private static final String CREATE_TABLE_LOGIN = "CREATE TABLE " + TABLE_LOGIN + " ("
-            + LOGIN_ID              + " INTEGER PRIMARY KEY AUTOINCREMENT"          + ", "
-            + LOGIN_NAME            + " TEXT"                                       + ", "
-            + LOGIN_EMAIL           + " TEXT"                                       + ", "
-            + LOGIN_USERNAME        + " TEXT"                                       + ", "
-            + LOGIN_PASSWORD        + " TEXT"                                       + ", "
-            + LOGIN_HINT            + " TEXT"                                       + ", "
-            + LOGIN_CREATED_DATE    + " DATETIME"                                   + ", "
-            + LOGIN_MODIFIED_DATE   + " DATETIME"
+            + LOGIN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "
+            + LOGIN_NAME + " TEXT" + ", "
+            + LOGIN_EMAIL + " TEXT" + ", "
+            + LOGIN_USERNAME + " TEXT" + ", "
+            + LOGIN_PASSWORD + " TEXT" + ", "
+            + LOGIN_HINT + " TEXT" + ", "
+            + LOGIN_CREATED_DATE + " DATETIME" + ", "
+            + LOGIN_MODIFIED_DATE + " DATETIME"
             + ")";
 
     //endregion
@@ -121,7 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         InitialData initialData = new InitialData(myContext);
         List<Hero> heroList = initialData.getHeroes();
 
-        for(Hero hero: heroList) {
+        for (Hero hero : heroList) {
             insertHero(db, hero);
         }
     }
@@ -152,12 +152,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Hero getHeroByTag (Object key) {
+    public Hero getHeroByTag(Object key) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String query = SelectByTagQuery(TABLE_HERO, HERO_ID, key);
 
-        Log.e(TAG, query);
+        Log.d(TAG, query);
 
         Cursor cur = db.rawQuery(query, null);
 
@@ -185,9 +185,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Hero> getHeroes() {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Hero> heroList = new ArrayList<>();
-        String query = SelectAllQuery(TABLE_HERO);
+        String query = SelectAllQuery(TABLE_HERO, null, HERO_ID);
 
-        Log.e(TAG, query);
+        Log.d(TAG, query);
 
         Cursor cur = db.rawQuery(query, null);
 
@@ -215,11 +215,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //endregion
 
     //region Generate Queries
-    private String SelectByTagQuery (String tableName, String ColumnName, Object key) {
+    private String SelectByTagQuery(String tableName, String ColumnName, Object key) {
 
         String query = "";
 
-        if (key instanceof String){
+        if (key instanceof String) {
             query = "SELECT * FROM " + tableName + " WHERE " + ColumnName + " LIKE '%" + key + "%'";
         } else if (key instanceof Integer) {
             query = "SELECT * FROM " + tableName + " WHERE " + ColumnName + " = " + key;
@@ -228,8 +228,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return query;
     }
 
-    private String SelectAllQuery (String tableName) {
-        return "SELECT * FROM " + tableName;
+    private String SelectAllQuery(String tableName, ContentValues whereConditions, String orderBy) {
+        String query;
+        StringBuilder where = new StringBuilder();
+        query = "SELECT * FROM " + tableName;
+
+        if (whereConditions != null) {
+            int count = 0;
+            where.append(" WHERE ");
+            for (String columnName : whereConditions.keySet()) {
+                count += 1;
+                where.append(columnName + " = ");
+                where.append(whereConditions.get(columnName));
+                if (whereConditions.size() > count) {
+                    where.append(" AND ");
+                }
+            }
+        } else if (!orderBy.isEmpty()) {
+            orderBy = " ORDER BY " + orderBy;
+        }
+
+        return query + where.toString() + orderBy;
     }
 
     //endregion

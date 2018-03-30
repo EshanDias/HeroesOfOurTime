@@ -17,6 +17,9 @@
             android:layout_gravity="center"
             android:textSize="10pt"
             android:padding="10dp" />
+        <TextView
+            android:id="@+id/textView_HeroId"
+            android:visibility="invisible"/>
     </TableRow>
 
 </TableLayout>

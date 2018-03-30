@@ -14,6 +14,7 @@ import com.assignments.sliit.heroesofourtime.core.ImageTextList;
 import com.assignments.sliit.heroesofourtime.dbAccess.DatabaseHelper;
 import com.assignments.sliit.heroesofourtime.model.Hero;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     DatabaseHelper db;
-    Integer imageRes[] = {R.drawable.nelson_mandela, R.drawable.stephen_hawking,R.drawable.abdul_kalam,
-            R.drawable.steve_jobs,R.drawable.oprah_winfrey,R.drawable.warren_buffett,R.drawable.bill_gates,
-            R.drawable.pele,R.drawable.angela_merkel,R.drawable.mark_zuckerberg,};
+
     ListView list;
     List<Hero> heroList;
-    List<String> heroNameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +32,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         db = new DatabaseHelper(getApplicationContext());
-        heroList = db.getHeroes();
+        try {
+            heroList = db.getHeroes();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         db.closeDB();
-        heroNameList = new ArrayList<>(heroList.size());
 
         if (heroList == null) {
             Log.e(TAG, "No Heroes");
         } else {
-            for (Hero h : heroList) {
-                heroNameList.add(h.getName());
-            }
 
-            ImageTextList adapter = new ImageTextList(MainActivity.this, heroNameList, imageRes);
+            ImageTextList adapter = new ImageTextList(MainActivity.this, heroList);
             list = findViewById(R.id.heroListView);
             list.setAdapter(adapter);
 
@@ -54,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    Toast.makeText(MainActivity.this, "You Clicked at " + heroNameList.get(position), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "You Clicked at " + heroList.get(position).getName(), Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(MainActivity.this, HeroProfileActivity.class);
-                    intent.putExtra("HeroID", position+1);
+                    intent.putExtra("HeroID", heroList.get(position).getHeroID());
                     MainActivity.this.startActivity(intent);
                 }
             });

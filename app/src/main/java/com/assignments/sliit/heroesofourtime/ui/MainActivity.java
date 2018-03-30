@@ -1,5 +1,6 @@
 package com.assignments.sliit.heroesofourtime.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import com.assignments.sliit.heroesofourtime.core.ImageTextList;
 import com.assignments.sliit.heroesofourtime.dbAccess.DatabaseHelper;
 import com.assignments.sliit.heroesofourtime.model.Hero;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     DatabaseHelper db;
-    Integer imageRes[] = {R.drawable.nelson_mandela, R.drawable.stephen_hawking,R.drawable.abdul_kalam,
-            R.drawable.steve_jobs,R.drawable.oprah_winfrey,R.drawable.warren_buffett,R.drawable.bill_gates,
-            R.drawable.pele,R.drawable.angela_merkel,R.drawable.mark_zuckerberg,};
+
     ListView list;
+    List<Hero> heroList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,23 +37,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         db = new DatabaseHelper(getApplicationContext());
-
-        List<Hero> heroList = db.getHeroes();
-
+        try {
+            heroList = db.getHeroes();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         db.closeDB();
 
         if (heroList == null) {
             Log.e(TAG, "No Heroes");
-        }
-        else {
-            final List<String> heroes = new ArrayList<>();
+        } else {
 
-            for (Hero h : heroList) {
-                heroes.add(h.getName());
-
-            }
-
-            ImageTextList adapter = new ImageTextList(MainActivity.this, heroes, imageRes);
+            ImageTextList adapter = new ImageTextList(MainActivity.this, heroList);
             list = findViewById(R.id.heroListView);
             list.setAdapter(adapter);
 
@@ -61,8 +57,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    Toast.makeText(MainActivity.this, "You Clicked at " + heroes.get(position), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "You Clicked at " + heroList.get(position).getName(), Toast.LENGTH_SHORT).show();
 
+                    Intent intent = new Intent(MainActivity.this, HeroProfileActivity.class);
+                    intent.putExtra("HeroID", heroList.get(position).getHeroID());
+                    MainActivity.this.startActivity(intent);
                 }
             });
         }

@@ -23,7 +23,7 @@ public class Hero {
     private String Comments;
     private Date CreatedDate;
     private Date ModifiedDate;
-    private Drawable HeroImage;
+    private Integer HeroImage;
 
     public Hero (){
         ModifiedDate = Calendar.getInstance().getTime();
@@ -40,7 +40,7 @@ public class Hero {
         CreatedDate = Calendar.getInstance().getTime();
     }
 
-    public Hero (String name, Date birthdate, Date death, String summary, String description, Drawable image){
+    public Hero (String name, Date birthdate, Date death, String summary, String description, Integer image){
         Name = name;
         Birthday = birthdate;
         Death = death;
@@ -127,16 +127,20 @@ public class Hero {
     public int CalculateAge() {
         int age;
         Calendar cal = Calendar.getInstance();
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        if (this.Death != null) {
+            cal.setTime(this.Death);
+        }
+        int currentYear = cal.get(Calendar.YEAR);
+
         cal.setTime(Birthday);
         age =  currentYear - cal.get(Calendar.YEAR);
         return age;
     }
-    public Drawable getHeroImage() {
+    public Integer getHeroImage() {
         return HeroImage;
     }
 
-    public void setHeroImage(Drawable heroImage) {
+    public void setHeroImage(Integer heroImage) {
         HeroImage = heroImage;
     }
 }

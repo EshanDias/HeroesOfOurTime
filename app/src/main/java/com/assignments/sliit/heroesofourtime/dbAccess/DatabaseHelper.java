@@ -1,5 +1,6 @@
 package com.assignments.sliit.heroesofourtime.dbAccess;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +12,8 @@ import android.util.Log;
 import com.assignments.sliit.heroesofourtime.core.ImageHelper;
 import com.assignments.sliit.heroesofourtime.model.Hero;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -59,27 +62,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Table Create Statements
     private static final String CREATE_TABLE_HERO = "CREATE TABLE " + TABLE_HERO + " ("
-            + HERO_ID               + " INTEGER PRIMARY KEY AUTOINCREMENT"          + ", "
-            + HERO_NAME             + " TEXT"                                       + ", "
-            + HERO_BIRTHDAY         + " DATETIME"                                   + ", "
-            + HERO_DEATH            + " DATETIME"                                   + ", "
-            + HERO_SUMMARY          + " TEXT"                                       + ", "
-            + HERO_DESCRIPTION      + " TEXT"                                       + ", "
-            + HERO_COMMENTS         + " TEXT"                                       + ", "
-            + HERO_CREATED_DATE     + " DATETIME"                                   + ", "
-            + HERO_MODIFIED_DATE    + " DATETIME"                                   + ", "
-            + HERO_IMAGE            + " TEXT"
+            + HERO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "
+            + HERO_NAME + " TEXT" + ", "
+            + HERO_BIRTHDAY + " INTEGER" + ", "
+            + HERO_DEATH + " INTEGER" + ", "
+            + HERO_SUMMARY + " TEXT" + ", "
+            + HERO_DESCRIPTION + " TEXT" + ", "
+            + HERO_COMMENTS + " TEXT" + ", "
+            + HERO_CREATED_DATE + " INTEGER" + ", "
+            + HERO_MODIFIED_DATE + " INTEGER" + ", "
+            + HERO_IMAGE + " INTEGER"
             + ")";
 
     private static final String CREATE_TABLE_LOGIN = "CREATE TABLE " + TABLE_LOGIN + " ("
-            + LOGIN_ID              + " INTEGER PRIMARY KEY AUTOINCREMENT"          + ", "
-            + LOGIN_NAME            + " TEXT"                                       + ", "
-            + LOGIN_EMAIL           + " TEXT"                                       + ", "
-            + LOGIN_USERNAME        + " TEXT"                                       + ", "
-            + LOGIN_PASSWORD        + " TEXT"                                       + ", "
-            + LOGIN_HINT            + " TEXT"                                       + ", "
-            + LOGIN_CREATED_DATE    + " DATETIME"                                   + ", "
-            + LOGIN_MODIFIED_DATE   + " DATETIME"
+            + LOGIN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "
+            + LOGIN_NAME + " TEXT" + ", "
+            + LOGIN_EMAIL + " TEXT" + ", "
+            + LOGIN_USERNAME + " TEXT" + ", "
+            + LOGIN_PASSWORD + " TEXT" + ", "
+            + LOGIN_HINT + " TEXT" + ", "
+            + LOGIN_CREATED_DATE + " INTEGER" + ", "
+            + LOGIN_MODIFIED_DATE + " INTEGER"
             + ")";
 
     //endregion
@@ -93,9 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_HERO);
-        Log.e(TAG, CREATE_TABLE_HERO);
         db.execSQL(CREATE_TABLE_LOGIN);
-        Log.e(TAG, CREATE_TABLE_LOGIN);
 
         seedData(db);
     }
@@ -121,7 +122,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         InitialData initialData = new InitialData(myContext);
         List<Hero> heroList = initialData.getHeroes();
 
-        for(Hero hero: heroList) {
+        for (Hero hero : heroList) {
             insertHero(db, hero);
         }
     }
@@ -130,34 +131,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //region CRUD Operations - Hero Table
 
+    @SuppressLint("SimpleDateFormat")
     private void insertHero(SQLiteDatabase db, Hero hero) {
-        ImageHelper imageHelper = new ImageHelper();
-
         ContentValues values = new ContentValues();
         values.put(HERO_NAME, hero.getName());
-        values.put(HERO_BIRTHDAY, String.valueOf(hero.getBirthday()));
-        values.put(HERO_DEATH, String.valueOf(hero.getDeath()));
+        values.put(HERO_BIRTHDAY, new SimpleDateFormat("yyyy-MM-dd").format(hero.getBirthday()));
+        if (hero.getDeath() != null) {
+            values.put(HERO_DEATH, new SimpleDateFormat("yyyy-MM-dd").format(hero.getDeath()));
+        } else {
+            values.put(HERO_DEATH, "");
+        }
         values.put(HERO_SUMMARY, hero.getSummary());
         values.put(HERO_DESCRIPTION, hero.getDescription());
         values.put(HERO_COMMENTS, hero.getComments());
-        values.put(HERO_MODIFIED_DATE, String.valueOf(Calendar.getInstance().getTime()));
-        values.put(HERO_CREATED_DATE, String.valueOf(Calendar.getInstance().getTime()));
-        //values.put(HERO_IMAGE, imageHelper.insetImage(hero.getHeroImage()));
+        values.put(HERO_MODIFIED_DATE, new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+        values.put(HERO_CREATED_DATE, new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+        values.put(HERO_IMAGE, hero.getHeroImage());
 
         //insert row
         try {
-            db.insert(TABLE_HERO, HERO_DEATH, values);
+            db.insert(TABLE_HERO, null, values);
         } catch (SQLException e) {
             Log.e(TAG, "Hero Name: " + hero.getName() + "\n" + e.getMessage());
         }
     }
 
-    public Hero getHeroByTag (Object key) {
+    public Hero getHeroByTag(Object key) throws ParseException {
         SQLiteDatabase db = this.getReadableDatabase();
-
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String query = SelectByTagQuery(TABLE_HERO, HERO_ID, key);
 
-        Log.e(TAG, query);
+        Log.d(TAG, query);
 
         Cursor cur = db.rawQuery(query, null);
 
@@ -167,13 +171,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Hero hero = new Hero();
             hero.setHeroID(cur.getInt(cur.getColumnIndex(HERO_ID)));
             hero.setName(cur.getString(cur.getColumnIndex(HERO_NAME)));
-            hero.setBirthday(new Date(cur.getLong(cur.getColumnIndex(HERO_BIRTHDAY))));
-            hero.setDeath(new Date(cur.getLong(cur.getColumnIndex(HERO_DEATH))));
+            hero.setBirthday(sdf.parse(cur.getString(cur.getColumnIndex(HERO_BIRTHDAY))));
+            if (cur.getString(cur.getColumnIndex(HERO_DEATH)).isEmpty()){
+                hero.setDeath(null);
+            }else {
+                hero.setDeath(sdf.parse(cur.getString(cur.getColumnIndex(HERO_DEATH))));
+            }
             hero.setSummary(cur.getString(cur.getColumnIndex(HERO_SUMMARY)));
             hero.setDescription(cur.getString(cur.getColumnIndex(HERO_DESCRIPTION)));
             hero.setComments(cur.getString(cur.getColumnIndex(HERO_COMMENTS)));
-            hero.setModifiedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_MODIFIED_DATE))));
-            hero.setCreatedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_CREATED_DATE))));
+            hero.setModifiedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_MODIFIED_DATE))));
+            hero.setCreatedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_CREATED_DATE))));
+            hero.setHeroImage(cur.getInt(cur.getColumnIndex(HERO_IMAGE)));
 
             cur.close();
             return hero;
@@ -182,12 +191,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<Hero> getHeroes() {
+    public List<Hero> getHeroes() throws ParseException {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Hero> heroList = new ArrayList<>();
-        String query = SelectAllQuery(TABLE_HERO);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String query = SelectAllQuery(TABLE_HERO, null, HERO_ID);
 
-        Log.e(TAG, query);
+        Log.d(TAG, query);
 
         Cursor cur = db.rawQuery(query, null);
 
@@ -197,29 +207,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Hero hero = new Hero();
                 hero.setHeroID(cur.getInt(cur.getColumnIndex(HERO_ID)));
                 hero.setName(cur.getString(cur.getColumnIndex(HERO_NAME)));
-                hero.setBirthday(new Date(cur.getLong(cur.getColumnIndex(HERO_BIRTHDAY))));
-                hero.setDeath(new Date(cur.getLong(cur.getColumnIndex(HERO_DEATH))));
+                hero.setBirthday(sdf.parse(cur.getString(cur.getColumnIndex(HERO_BIRTHDAY))));
+                if (cur.getString(cur.getColumnIndex(HERO_DEATH)).isEmpty()){
+                    hero.setDeath(null);
+                }else {
+                    hero.setDeath(sdf.parse(cur.getString(cur.getColumnIndex(HERO_DEATH))));
+                }
                 hero.setSummary(cur.getString(cur.getColumnIndex(HERO_SUMMARY)));
                 hero.setDescription(cur.getString(cur.getColumnIndex(HERO_DESCRIPTION)));
                 hero.setComments(cur.getString(cur.getColumnIndex(HERO_COMMENTS)));
-                hero.setModifiedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_MODIFIED_DATE))));
-                hero.setCreatedDate(new Date(cur.getLong(cur.getColumnIndex(HERO_CREATED_DATE))));
+                hero.setModifiedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_MODIFIED_DATE))));
+                hero.setCreatedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_CREATED_DATE))));
+                hero.setHeroImage(cur.getInt(cur.getColumnIndex(HERO_IMAGE)));
 
                 heroList.add(hero);
             } while (cur.moveToNext());
         }
-        cur.close();
+        if (cur != null) {
+            cur.close();
+        }
         return heroList;
     }
 
     //endregion
 
     //region Generate Queries
-    private String SelectByTagQuery (String tableName, String ColumnName, Object key) {
+    private String SelectByTagQuery(String tableName, String ColumnName, Object key) {
 
         String query = "";
 
-        if (key instanceof String){
+        if (key instanceof String) {
             query = "SELECT * FROM " + tableName + " WHERE " + ColumnName + " LIKE '%" + key + "%'";
         } else if (key instanceof Integer) {
             query = "SELECT * FROM " + tableName + " WHERE " + ColumnName + " = " + key;
@@ -228,8 +245,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return query;
     }
 
-    private String SelectAllQuery (String tableName) {
-        return "SELECT * FROM " + tableName;
+    private String SelectAllQuery(String tableName, ContentValues whereConditions, String orderBy) {
+        String query;
+        StringBuilder where = new StringBuilder();
+        query = "SELECT * FROM " + tableName;
+
+        if (whereConditions != null) {
+            int count = 0;
+            where.append(" WHERE ");
+            for (String columnName : whereConditions.keySet()) {
+                count += 1;
+                where.append(columnName).append(" = ");
+                where.append(whereConditions.get(columnName));
+                if (whereConditions.size() > count) {
+                    where.append(" AND ");
+                }
+            }
+        } else if (!orderBy.isEmpty()) {
+            orderBy = " ORDER BY " + orderBy;
+        }
+
+        return query + where.toString() + orderBy;
     }
 
     //endregion

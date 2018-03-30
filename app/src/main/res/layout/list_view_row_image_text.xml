@@ -11,15 +11,17 @@
             android:id="@+id/imageView_HeroImage"
             android:layout_width="80dp"
             android:layout_height="80dp" />
-
         <TextView
             android:id="@+id/textView_heroName"
+            android:text="Name"
             android:layout_gravity="center"
             android:fontFamily="casual"
             android:padding="10dp"
-            android:text="Name"
             android:textSize="10pt"
             android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/textView_HeroId"
+            android:visibility="invisible"/>
     </TableRow>
 
 </TableLayout>

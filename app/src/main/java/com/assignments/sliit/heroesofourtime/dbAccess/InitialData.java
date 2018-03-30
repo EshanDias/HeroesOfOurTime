@@ -31,7 +31,7 @@ public class InitialData {
         //region INSERT HEROES
         //1
         hero = new Hero();
-        hero.setName("NELSON MANDELA");
+        hero.setName("Nelson Mandela");
         cal.set(1918,7,18);
         hero.setBirthday(cal.getTime());
         cal.set(2013,12,5);
@@ -46,12 +46,12 @@ public class InitialData {
 
         //2
         hero = new Hero();
-        hero.setName("STEPHEN HAWKING");
+        hero.setName("Stephen Hawking");
         cal.set(1918,1,8);
         hero.setBirthday(cal.getTime());
         cal.set(2018,3,14);
         hero.setDeath(cal.getTime());
-        hero.setSummary("Scientist in the field of  Theoretical Physics and Cosmology");
+        hero.setSummary("Scientist in the field of Theoretical Physics and Cosmology");
         hero.setDescription("Stephen Hawking is an imminent scientist in the field of  Theoretical Physics and Cosmology has worked on the basic laws which govern the universe and was the first to state that black holes emit radiations (often termed as Hawkings Radiation) after he unified the General Relativity with Quantum Theory. He has been confined to wheelchair and dependent on a computerized voice system for communication for most of his life after being diagnosed with ALS (a form of Motor Neuron Disease) at an age of 21. Despite all these setbacks he has achieved many things which most others can only wish to do in their dreams. Hawking has been conferred with 12 honorary degrees and has been awarded CBE (UK), and he is also a recipient of the Presidential Medal of Freedom (USA) to name a few.");
         hero.setHeroImage(myContext.getDrawable(R.drawable.stephen_hawking));
         hero.setCreatedDate(Calendar.getInstance().getTime());
@@ -61,7 +61,7 @@ public class InitialData {
 
         //3
         hero = new Hero();
-        hero.setName("ABDUL KALAM");
+        hero.setName("Abdul Kalam");
         cal.set(1931,10,15);
         hero.setBirthday(cal.getTime());
 //        cal.set(2013,12,5);
@@ -76,7 +76,7 @@ public class InitialData {
 
         //4
         hero = new Hero();
-        hero.setName("STEVE JOBS");
+        hero.setName("Steve Jobs");
         cal.set(1955,2,29);
         hero.setBirthday(cal.getTime());
         cal.set(2011,10,5);
@@ -91,7 +91,7 @@ public class InitialData {
 
         //5
         hero = new Hero();
-        hero.setName("OPRAH WINFREY");
+        hero.setName("Oprah Winfrey");
         cal.set(1954,1,29);
         hero.setBirthday(cal.getTime());
         hero.setDeath(null);
@@ -105,11 +105,11 @@ public class InitialData {
 
         //6
         hero = new Hero();
-        hero.setName("WARREN BUFFETT");
+        hero.setName("Warren Buffett");
         cal.set(1930,8,30);
         hero.setBirthday(cal.getTime());
         hero.setDeath(null);
-        hero.setSummary("'Wizard of Omaha");
+        hero.setSummary("Wizard of Omaha");
         hero.setDescription("Warren Buffett is a business magnate and investor, also known as “Wizard of Omaha”, Omaha being his birth place. He is presently the Chairman and CEO of Berkshire Hathaway. Buffett sounded like a businessman right from his childhood and was able to create a ladder of success to reach the zenith. He doesn’t believe in inheritance and so that his children become successful on their own and not by any support. He is widely considered as the most successful investor of the 20th century. He is the ranked among the world richest persons and most influential people in the world. Even though he is mighty rich but still he doesn’t waste his money and has pledged to donate about 99% of his wealth through Buffett Foundation and Gates & Melinda Foundation. He was conferred with Presidential Medal of Freedom (U.S.A) by Barack Obama in 2011.");
         hero.setHeroImage(myContext.getDrawable(R.drawable.warren_buffett));
         hero.setCreatedDate(Calendar.getInstance().getTime());
@@ -119,7 +119,7 @@ public class InitialData {
 
         //7
         hero = new Hero();
-        hero.setName("BILL GATES");
+        hero.setName("Bill Gates");
         cal.set(1955,10,28);
         hero.setBirthday(cal.getTime());
         hero.setDeath(null);
@@ -133,7 +133,7 @@ public class InitialData {
 
         //8
         hero = new Hero();
-        hero.setName("PELE");
+        hero.setName("Pele");
         cal.set(1940,10,23);
         hero.setBirthday(cal.getTime());
         hero.setDeath(null);
@@ -147,7 +147,7 @@ public class InitialData {
 
         //9
         hero = new Hero();
-        hero.setName("ANGELA MERKEL");
+        hero.setName("Angela Merkel");
         cal.set(1954,7,7);
         hero.setBirthday(cal.getTime());
         hero.setDeath(null);
@@ -161,11 +161,10 @@ public class InitialData {
 
         //10
         hero = new Hero();
-        hero.setName("MARK ZUCKERBERG");
+        hero.setName("Mark Zuckerberg");
         cal.set(1984,5,14);
         hero.setBirthday(cal.getTime());
-        cal.set(2013,12,5);
-        hero.setDeath(cal.getTime());
+        hero.setDeath(null);
         hero.setSummary("Mark Zuckerberg is the reason for Internet boom");
         hero.setDescription("He is one of the co-founder of the famous Social Networking website Facebook. He created the site with his friends in his college dorm, and then in order to concentrate more on the website he left Harvard University.Since then he has just rose to prominence and now and there are more than 1 billion users on Facebook indicating its success story. The success of Facebook made Mark the youngest CEO in the Fortune 500 List. Although amassing a good fortune, Zukerberg has donated his millions to fund various philanthropic causes. He has also pledged to donate at least 50% of his wealth to charity in his lifetime.");
         hero.setHeroImage(myContext.getDrawable(R.drawable.mark_zuckerberg));

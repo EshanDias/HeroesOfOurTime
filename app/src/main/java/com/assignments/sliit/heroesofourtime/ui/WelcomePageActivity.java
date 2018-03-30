@@ -21,16 +21,16 @@ public class WelcomePageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome_page);
 
         tv = (TextView) findViewById(R.id.tv);
-        iv = (ImageView) findViewById(R.id.iv);
+        //iv = (ImageView) findViewById(R.id.iv);
         Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.home_transition);
         tv.startAnimation(myAnim);
-        iv.startAnimation(myAnim);
+        //iv.startAnimation(myAnim);
 
         final Intent i =new Intent(this,MainActivity.class);
         Thread timer = new Thread(){
             public void run(){
                 try{
-                    sleep(5000);
+                    sleep(3000);
                 }catch (InterruptedException e) {
                     e.printStackTrace();
                 }

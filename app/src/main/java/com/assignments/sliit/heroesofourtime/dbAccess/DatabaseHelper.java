@@ -64,13 +64,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_HERO = "CREATE TABLE " + TABLE_HERO + " ("
             + HERO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "
             + HERO_NAME + " TEXT" + ", "
-            + HERO_BIRTHDAY + " INTEGER" + ", "
-            + HERO_DEATH + " INTEGER" + ", "
+            + HERO_BIRTHDAY + " TEXT" + ", "
+            + HERO_DEATH + " TEXT" + ", "
             + HERO_SUMMARY + " TEXT" + ", "
             + HERO_DESCRIPTION + " TEXT" + ", "
             + HERO_COMMENTS + " TEXT" + ", "
-            + HERO_CREATED_DATE + " INTEGER" + ", "
-            + HERO_MODIFIED_DATE + " INTEGER" + ", "
+            + HERO_CREATED_DATE + " TEXT" + ", "
+            + HERO_MODIFIED_DATE + " TEXT" + ", "
             + HERO_IMAGE + " INTEGER"
             + ")";
 
@@ -81,8 +81,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + LOGIN_USERNAME + " TEXT" + ", "
             + LOGIN_PASSWORD + " TEXT" + ", "
             + LOGIN_HINT + " TEXT" + ", "
-            + LOGIN_CREATED_DATE + " INTEGER" + ", "
-            + LOGIN_MODIFIED_DATE + " INTEGER"
+            + LOGIN_CREATED_DATE + " TEXT" + ", "
+            + LOGIN_MODIFIED_DATE + " TEXT"
             + ")";
 
     //endregion

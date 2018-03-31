@@ -2,6 +2,13 @@ package com.assignments.sliit.heroesofourtime.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +30,8 @@ public class HeroProfileActivity extends AppCompatActivity {
     Integer HeroId;
     Hero hero;
     Context myContext;
+    FloatingActionButton fab;
+    boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +39,12 @@ public class HeroProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hero_profile);
 
         myContext = this.getApplicationContext();
-
+        fab = findViewById(R.id.myFAB);
         TextView tv_Description = findViewById(R.id.textView_heroDescription);
+
         tv_Description.setMovementMethod(new ScrollingMovementMethod());
 
         HeroId = getIntent().getIntExtra("HeroID", 0);
-
         db = new DatabaseHelper(getApplicationContext());
 
         try {
@@ -45,6 +54,13 @@ public class HeroProfileActivity extends AppCompatActivity {
         }
 
         setHero(hero);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToFavourites();
+            }
+        });
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -71,8 +87,16 @@ public class HeroProfileActivity extends AppCompatActivity {
         tv_Description.setText(hero.getDescription());
     }
 
-    public void addToFavourites(View view) {
-        Toast.makeText(myContext, "Added To Favourites", Toast.LENGTH_SHORT).show();
+    public void addToFavourites() {
+        if(flag){
+            fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_favourite_gray));
+            flag = false;
+            Toast.makeText(myContext, "Removed From Favourites", Toast.LENGTH_SHORT).show();
+        } else {
+            fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_favourite_red));
+            flag = true;
+            Toast.makeText(myContext, "Added To Favourites", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

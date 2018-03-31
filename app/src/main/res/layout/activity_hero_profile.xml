@@ -14,12 +14,10 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
-        android:onClick="addToFavourites"
-        android:src="@drawable/ic_my_icon"
+        android:src="@drawable/ic_favourite_gray"
         app:backgroundTint="@color/white"
         app:borderWidth="0dp"
-        app:elevation="5dp"
-        app:rippleColor="@color/black" />
+        app:elevation="5dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -75,6 +73,7 @@
                     android:gravity="center"
                     android:text="Age Years"
                     android:textSize="15sp" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -103,7 +102,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:lineSpacingExtra="8sp"
                 android:padding="5dp"
-                android:text="Desciption"
+                android:text="Description"
                 android:textAlignment="viewStart"
                 android:textSize="18sp"
                 android:verticalScrollbarPosition="right"
@@ -111,5 +110,4 @@
 
         </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.assignments.sliit.heroesofourtime.ui;
 
+import android.annotation.SuppressLint;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,21 +42,26 @@ public class HeroProfileActivity extends AppCompatActivity {
         setHero(hero);
     }
 
+    @SuppressLint("SimpleDateFormat")
     private void setHero(Hero hero) {
         TextView tv_Name = findViewById(R.id.textView_heroName);
         TextView tv_Age = findViewById(R.id.textView_heroAge);
         TextView tv_Birthday = findViewById(R.id.textView_heroBirthday);
-        TextView tv_Death = findViewById(R.id.textView_heroDeath);
         TextView tv_Summary = findViewById(R.id.textView_heroSummary);
         TextView tv_Description = findViewById(R.id.textView_heroDescription);
         ImageView iv_Image = findViewById(R.id.imageView_HeroImage);
+        String birthdayDeath;
+        String death;
+        String birthday = new SimpleDateFormat("yyyy-MM-dd").format(hero.getBirthday());
+        death = ( hero.getDeath() == null ? "PRESENT" :
+                (new SimpleDateFormat("yyyy-MM-dd").format(hero.getDeath())));
 
         iv_Image.setImageResource(hero.getHeroImage());
         tv_Name.setText(hero.getName());
-        tv_Birthday.setText((new SimpleDateFormat("yyyy-MM-dd").format(hero.getBirthday())));
-        tv_Death.setText( hero.getDeath() == null ? null :
-                (new SimpleDateFormat("yyyy-MM-dd").format(hero.getDeath())));
-        tv_Age.setText(String.valueOf(hero.CalculateAge()));
+        birthdayDeath = String.format("(%s - %s)", birthday, death);
+        tv_Birthday.setText((birthdayDeath));
+
+        tv_Age.setText(String.format("%s YEARS", String.valueOf(hero.CalculateAge())));
         tv_Summary.setText(hero.getSummary());
         tv_Description.setText(hero.getDescription());
     }

@@ -21,7 +21,8 @@
             <ImageView
                 android:id="@+id/imageView_HeroImage"
                 android:layout_width="150dp"
-                android:layout_height="150dp" />
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,23 +48,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="Birthday"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/textView_heroDeath"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="Death"
-                    android:textSize="15sp" />
+                    android:text="(Birthday - Death)"
+                    android:textSize="15sp"
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/textView_heroAge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Age Years"
+                    android:gravity="center"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="Age"
                     android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
@@ -93,7 +88,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:lineSpacingExtra="8sp"
                 android:padding="5dp"
-                android:text="desciption"
+                android:text="Desciption"
                 android:textAlignment="viewStart"
                 android:textSize="18sp"
                 android:verticalScrollbarPosition="right"

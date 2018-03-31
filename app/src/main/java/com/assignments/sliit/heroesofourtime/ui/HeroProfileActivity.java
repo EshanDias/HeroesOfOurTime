@@ -2,9 +2,6 @@ package com.assignments.sliit.heroesofourtime.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +23,7 @@ public class HeroProfileActivity extends AppCompatActivity {
     Integer HeroId;
     Hero hero;
     Context myContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +58,7 @@ public class HeroProfileActivity extends AppCompatActivity {
         String birthdayDeath;
         String death;
         String birthday = new SimpleDateFormat("yyyy-MM-dd").format(hero.getBirthday());
-        death = ( hero.getDeath() == null ? "PRESENT" :
+        death = (hero.getDeath() == null ? "PRESENT" :
                 (new SimpleDateFormat("yyyy-MM-dd").format(hero.getDeath())));
 
         iv_Image.setImageResource(hero.getHeroImage());
@@ -73,8 +71,8 @@ public class HeroProfileActivity extends AppCompatActivity {
         tv_Description.setText(hero.getDescription());
     }
 
-        public void addToFavourites(View view) {
-            Toast.makeText(myContext,"Added To Favourites", Toast.LENGTH_SHORT).show();
-        }
+    public void addToFavourites(View view) {
+        Toast.makeText(myContext, "Added To Favourites", Toast.LENGTH_SHORT).show();
+    }
 
 }

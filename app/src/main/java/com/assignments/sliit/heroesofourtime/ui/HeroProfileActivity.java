@@ -1,12 +1,14 @@
 package com.assignments.sliit.heroesofourtime.ui;
 
 import android.annotation.SuppressLint;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.assignments.sliit.heroesofourtime.R;
 import com.assignments.sliit.heroesofourtime.dbAccess.DatabaseHelper;
@@ -20,11 +22,14 @@ public class HeroProfileActivity extends AppCompatActivity {
     DatabaseHelper db;
     Integer HeroId;
     Hero hero;
+    Context myContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hero_profile);
+
+        myContext = this.getApplicationContext();
 
         TextView tv_Description = findViewById(R.id.textView_heroDescription);
         tv_Description.setMovementMethod(new ScrollingMovementMethod());
@@ -53,7 +58,7 @@ public class HeroProfileActivity extends AppCompatActivity {
         String birthdayDeath;
         String death;
         String birthday = new SimpleDateFormat("yyyy-MM-dd").format(hero.getBirthday());
-        death = ( hero.getDeath() == null ? "PRESENT" :
+        death = (hero.getDeath() == null ? "PRESENT" :
                 (new SimpleDateFormat("yyyy-MM-dd").format(hero.getDeath())));
 
         iv_Image.setImageResource(hero.getHeroImage());
@@ -65,4 +70,9 @@ public class HeroProfileActivity extends AppCompatActivity {
         tv_Summary.setText(hero.getSummary());
         tv_Description.setText(hero.getDescription());
     }
+
+    public void addToFavourites(View view) {
+        Toast.makeText(myContext, "Added To Favourites", Toast.LENGTH_SHORT).show();
+    }
+
 }

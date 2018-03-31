@@ -1,11 +1,16 @@
 package com.assignments.sliit.heroesofourtime.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.assignments.sliit.heroesofourtime.R;
 import com.assignments.sliit.heroesofourtime.dbAccess.DatabaseHelper;
@@ -19,11 +24,13 @@ public class HeroProfileActivity extends AppCompatActivity {
     DatabaseHelper db;
     Integer HeroId;
     Hero hero;
-
+    Context myContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hero_profile);
+
+        myContext = this.getApplicationContext();
 
         HeroId = getIntent().getIntExtra("HeroID", 0);
 
@@ -61,4 +68,9 @@ public class HeroProfileActivity extends AppCompatActivity {
         tv_Summary.setText(hero.getSummary());
         tv_Description.setText(hero.getDescription());
     }
+
+        public void addToFavourites(View view) {
+            Toast.makeText(myContext,"Added To Favourites", Toast.LENGTH_SHORT).show();
+        }
+
 }

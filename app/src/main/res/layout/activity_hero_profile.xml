@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.assignments.sliit.heroesofourtime.ui.HeroProfileActivity">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/myFAB"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_my_icon"
+        app:elevation="5dp"
+        app:backgroundTint="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        app:borderWidth="0dp"
+        app:rippleColor="@color/black"
+        android:onClick="addToFavourites"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +35,7 @@
                 android:id="@+id/imageView_HeroImage"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,16 +58,16 @@
                     android:id="@+id/textView_heroBirthday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="(Birthday - Death)"
-                    android:textSize="8pt"
-                    android:gravity="center"/>
+                    android:textSize="8pt" />
 
                 <TextView
                     android:id="@+id/textView_heroAge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Age Years"
                     android:gravity="center"
+                    android:text="Age Years"
                     android:textSize="8pt" />
             </LinearLayout>
         </LinearLayout>
@@ -70,6 +85,7 @@
                 android:text="Summary"
                 android:textAlignment="center"
                 android:textSize="6pt" />
+
             <TextView
                 android:id="@+id/textView_heroDescription"
                 android:layout_width="match_parent"
@@ -78,7 +94,9 @@
                 android:text="Description"
                 android:textSize="6pt" />
 
+
+
         </LinearLayout>
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

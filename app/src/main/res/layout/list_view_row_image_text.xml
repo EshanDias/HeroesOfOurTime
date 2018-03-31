@@ -10,7 +10,8 @@
         <ImageView
             android:id="@+id/imageView_HeroImage"
             android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"/>
         <TextView
             android:id="@+id/textView_heroName"
             android:text="Name"

@@ -13,24 +13,21 @@ import com.assignments.sliit.heroesofourtime.R;
 public class WelcomePageActivity extends AppCompatActivity {
 
     private TextView tv;
-    private ImageView iv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_page);
 
-        tv = (TextView) findViewById(R.id.tv);
-        //iv = (ImageView) findViewById(R.id.iv);
+        tv = findViewById(R.id.tv);
         Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.home_transition);
         tv.startAnimation(myAnim);
-        //iv.startAnimation(myAnim);
 
         final Intent i =new Intent(this,MainActivity.class);
         Thread timer = new Thread(){
             public void run(){
                 try{
-                    sleep(3000);
+                    sleep(2000);
                 }catch (InterruptedException e) {
                     e.printStackTrace();
                 }

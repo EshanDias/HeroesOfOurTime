@@ -24,7 +24,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/gradient_profileview"
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +37,7 @@
                 android:id="@+id/imageView_HeroImage"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,52 +51,63 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="casual"
                     android:text="Name"
                     android:textAlignment="center"
-                    android:textSize="9pt"
-                    android:textStyle="bold" />
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:textColor="#FF054B94"/>
 
                 <TextView
                     android:id="@+id/textView_heroBirthday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="(Birthday - Death)"
-                    android:textSize="8pt" />
+                    android:textSize="15sp"
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/textView_heroAge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:text="Age Years"
-                    android:textSize="8pt" />
+                    android:gravity="center"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:scrollbars="vertical">
 
             <TextView
                 android:id="@+id/textView_heroSummary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:fontFamily="casual"
+                android:padding="8dp"
                 android:text="Summary"
-                android:textAlignment="center"
-                android:textSize="6pt" />
+                android:textAlignment="textStart"
+                android:textColor="#FF054B94"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView_heroDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:lineSpacingExtra="8sp"
                 android:padding="5dp"
-                android:text="Description"
-                android:textSize="6pt" />
-
-
+                android:text="Desciption"
+                android:textAlignment="viewStart"
+                android:textSize="18sp"
+                android:verticalScrollbarPosition="right"
+                tools:ignore="RtlCompat" />
 
         </LinearLayout>
     </LinearLayout>

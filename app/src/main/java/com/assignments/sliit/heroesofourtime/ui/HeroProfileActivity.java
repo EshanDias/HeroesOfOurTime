@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,9 @@ public class HeroProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hero_profile);
 
         myContext = this.getApplicationContext();
+
+        TextView tv_Description = findViewById(R.id.textView_heroDescription);
+        tv_Description.setMovementMethod(new ScrollingMovementMethod());
 
         HeroId = getIntent().getIntExtra("HeroID", 0);
 

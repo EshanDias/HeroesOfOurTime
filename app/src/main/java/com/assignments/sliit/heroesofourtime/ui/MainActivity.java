@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    Toast.makeText(MainActivity.this, "You Clicked at " + heroList.get(position).getName(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "You Clicked at " + heroList.get(position).getName(), Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(MainActivity.this, HeroProfileActivity.class);
                     intent.putExtra("HeroID", heroList.get(position).getHeroID());

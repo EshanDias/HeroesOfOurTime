@@ -3,6 +3,7 @@ package com.assignments.sliit.heroesofourtime.ui;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,9 @@ public class HeroProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hero_profile);
+
+        TextView tv_Description = findViewById(R.id.textView_heroDescription);
+        tv_Description.setMovementMethod(new ScrollingMovementMethod());
 
         HeroId = getIntent().getIntExtra("HeroID", 0);
 

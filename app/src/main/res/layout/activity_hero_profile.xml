@@ -9,7 +9,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/gradient_profileview"
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,56 +33,71 @@
                 <TextView
                     android:id="@+id/textView_heroName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="59dp"
                     android:layout_gravity="center"
+                    android:fontFamily="casual"
                     android:text="Name"
                     android:textAlignment="center"
-                    android:textSize="9pt"
-                    android:textStyle="bold" />
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:textColor="#FF054B94"/>
 
                 <TextView
                     android:id="@+id/textView_heroBirthday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="Birthday"
-                    android:textSize="8pt" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/textView_heroDeath"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="Death"
-                    android:textSize="8pt" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/textView_heroAge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="Age"
-                    android:textSize="8pt" />
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:scrollbars="vertical">
 
             <TextView
                 android:id="@+id/textView_heroSummary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:fontFamily="casual"
+                android:padding="8dp"
                 android:text="Summary"
-                android:textAlignment="center"
-                android:textSize="6pt" />
+                android:textAlignment="textStart"
+                android:textColor="#FF054B94"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/textView_heroDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:lineSpacingExtra="8sp"
                 android:padding="5dp"
                 android:text="desciption"
-                android:textSize="6pt" />
+                android:textAlignment="viewStart"
+                android:textSize="18sp"
+                android:verticalScrollbarPosition="right"
+                tools:ignore="RtlCompat" />
 
         </LinearLayout>
     </LinearLayout>

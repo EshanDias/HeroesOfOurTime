@@ -24,6 +24,16 @@ public class Hero {
     private Date ModifiedDate;
     private Integer HeroImage;
 
+    public boolean isFavouriteStatus() {
+        return FavouriteStatus;
+    }
+
+    public void setFavouriteStatus(boolean favouriteStatus) {
+        FavouriteStatus = favouriteStatus;
+    }
+
+    private boolean FavouriteStatus;
+
     public Hero (){
         ModifiedDate = Calendar.getInstance().getTime();
     }

@@ -47,6 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String HERO_CREATED_DATE = "CreatedDate";
     private static final String HERO_MODIFIED_DATE = "ModifiedDate";
     private static final String HERO_IMAGE = "HeroImage";
+    private static final String HERO_FAVOURITE_STATUS = "FavouriteStatus";
 
     //Columns - User Table
     private static final String USER_ID = "ID";
@@ -66,35 +67,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Table Create Statements
     private static final String CREATE_TABLE_HERO = "CREATE TABLE " + TABLE_HERO + " ("
-            + HERO_ID               + " INTEGER PRIMARY KEY AUTOINCREMENT"          + ", "
-            + HERO_NAME             + " TEXT"                                       + ", "
-            + HERO_BIRTHDAY         + " TEXT"                                       + ", "
-            + HERO_DEATH            + " TEXT"                                       + ", "
-            + HERO_SUMMARY          + " TEXT"                                       + ", "
-            + HERO_DESCRIPTION      + " TEXT"                                       + ", "
-            + HERO_CREATED_DATE     + " TEXT"                                       + ", "
-            + HERO_MODIFIED_DATE    + " TEXT"                                       + ", "
-            + HERO_IMAGE            + " INTEGER"
+            + HERO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "
+            + HERO_NAME + " TEXT" + ", "
+            + HERO_BIRTHDAY + " TEXT" + ", "
+            + HERO_DEATH + " TEXT" + ", "
+            + HERO_SUMMARY + " TEXT" + ", "
+            + HERO_DESCRIPTION + " TEXT" + ", "
+            + HERO_CREATED_DATE + " TEXT" + ", "
+            + HERO_MODIFIED_DATE + " TEXT" + ", "
+            + HERO_IMAGE + " INTEGER" + ", "
+            + HERO_FAVOURITE_STATUS + " INTEGER"
             + ")";
 
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + " ("
-            + USER_ID               + " INTEGER PRIMARY KEY AUTOINCREMENT"          + ", "
-            + USER_NAME             + " TEXT"                                       + ", "
-            + USER_EMAIL            + " TEXT"                                       + ", "
-            + USER_USERNAME         + " TEXT"                                       + ", "
-            + USER_PASSWORD         + " TEXT"                                       + ", "
-            + USER_HINT             + " TEXT"                                       + ", "
-            + USER_CREATED_DATE     + " TEXT"                                       + ", "
-            + USER_MODIFIED_DATE    + " TEXT"
+            + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "
+            + USER_NAME + " TEXT" + ", "
+            + USER_EMAIL + " TEXT" + ", "
+            + USER_USERNAME + " TEXT" + ", "
+            + USER_PASSWORD + " TEXT" + ", "
+            + USER_HINT + " TEXT" + ", "
+            + USER_CREATED_DATE + " TEXT" + ", "
+            + USER_MODIFIED_DATE + " TEXT"
             + ")";
 
     private static final String CREATE_TABLE_USER_HERO = "CREATE TABLE " + TABLE_USER_HERO + " ("
-            + USER_HERO_USER_ID               + " INTEGER PRIMARY KEY AUTOINCREMENT"   + ", "
-            + USER_HERO_HERO_ID               + " TEXT"                                + ", "
-            + USER_HERO_COMMENTS              + " TEXT"                                + ", "
-            + USER_HERO_FAVOURITE_STATUS      + " TEXT"                                + ", "
-            + USER_CREATED_DATE               + " TEXT"                                + ", "
-            + USER_MODIFIED_DATE              + " TEXT"
+            + USER_HERO_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "
+            + USER_HERO_HERO_ID + " TEXT" + ", "
+            + USER_HERO_COMMENTS + " TEXT" + ", "
+            + USER_HERO_FAVOURITE_STATUS + " TEXT" + ", "
+            + USER_CREATED_DATE + " TEXT" + ", "
+            + USER_MODIFIED_DATE + " TEXT"
             + ")";
     //endregion
 
@@ -159,6 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(HERO_MODIFIED_DATE, new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
         values.put(HERO_CREATED_DATE, new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
         values.put(HERO_IMAGE, hero.getHeroImage());
+        values.put(HERO_FAVOURITE_STATUS, 0);
 
         //insert row
         try {
@@ -184,9 +187,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             hero.setHeroID(cur.getInt(cur.getColumnIndex(HERO_ID)));
             hero.setName(cur.getString(cur.getColumnIndex(HERO_NAME)));
             hero.setBirthday(sdf.parse(cur.getString(cur.getColumnIndex(HERO_BIRTHDAY))));
-            if (cur.getString(cur.getColumnIndex(HERO_DEATH)).isEmpty()){
+            if (cur.getString(cur.getColumnIndex(HERO_DEATH)).isEmpty()) {
                 hero.setDeath(null);
-            }else {
+            } else {
                 hero.setDeath(sdf.parse(cur.getString(cur.getColumnIndex(HERO_DEATH))));
             }
             hero.setSummary(cur.getString(cur.getColumnIndex(HERO_SUMMARY)));
@@ -194,6 +197,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             hero.setModifiedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_MODIFIED_DATE))));
             hero.setCreatedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_CREATED_DATE))));
             hero.setHeroImage(cur.getInt(cur.getColumnIndex(HERO_IMAGE)));
+            int favStatus = cur.getInt(cur.getColumnIndex(HERO_FAVOURITE_STATUS));
+            if (favStatus == 0) {
+                hero.setFavouriteStatus(false);
+            } else {
+                hero.setFavouriteStatus(true);
+            }
 
             cur.close();
             return hero;
@@ -219,9 +228,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 hero.setHeroID(cur.getInt(cur.getColumnIndex(HERO_ID)));
                 hero.setName(cur.getString(cur.getColumnIndex(HERO_NAME)));
                 hero.setBirthday(sdf.parse(cur.getString(cur.getColumnIndex(HERO_BIRTHDAY))));
-                if (cur.getString(cur.getColumnIndex(HERO_DEATH)).isEmpty()){
+                if (cur.getString(cur.getColumnIndex(HERO_DEATH)).isEmpty()) {
                     hero.setDeath(null);
-                }else {
+                } else {
                     hero.setDeath(sdf.parse(cur.getString(cur.getColumnIndex(HERO_DEATH))));
                 }
                 hero.setSummary(cur.getString(cur.getColumnIndex(HERO_SUMMARY)));
@@ -229,6 +238,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 hero.setModifiedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_MODIFIED_DATE))));
                 hero.setCreatedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_CREATED_DATE))));
                 hero.setHeroImage(cur.getInt(cur.getColumnIndex(HERO_IMAGE)));
+                int favStatus = cur.getInt(cur.getColumnIndex(HERO_FAVOURITE_STATUS));
+                if (favStatus == 0) {
+                    hero.setFavouriteStatus(false);
+                } else {
+                    hero.setFavouriteStatus(true);
+                }
 
                 heroList.add(hero);
             } while (cur.moveToNext());
@@ -237,6 +252,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cur.close();
         }
         return heroList;
+    }
+
+    public Boolean checkFavouriteStatus(int heroId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Boolean status;
+        int favStatus = 0;
+        ContentValues whereCondition = new ContentValues();
+        whereCondition.put(HERO_ID, heroId);
+
+        String query = SelectColumnByTagQuery(TABLE_HERO, HERO_FAVOURITE_STATUS, whereCondition);
+        Log.d(TAG, query);
+
+        Cursor cur = db.rawQuery(query, null);
+
+        if (cur != null) {
+            cur.moveToFirst();
+
+            favStatus = cur.getInt(cur.getColumnIndex(HERO_FAVOURITE_STATUS));
+
+        }
+        if (favStatus == 0) {
+            status = false;
+        } else {
+            status = true;
+        }
+
+        return status;
+    }
+
+    public void updateHero(ContentValues updateValues, ContentValues whereConditions) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = getUpdateQuery(TABLE_HERO, updateValues, whereConditions);
+        Log.d(TAG, query);
+
+        db.execSQL(query);
     }
 
     //endregion
@@ -278,5 +328,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return query + where.toString() + orderBy;
     }
 
+    private String SelectColumnByTagQuery(String tableName, String columnName, ContentValues whereConditions) {
+        String query = String.format("SELECT %s FROM %s", columnName, tableName);
+        StringBuilder where = new StringBuilder();
+
+        if (whereConditions != null) {
+            int count = 0;
+            where.append(" WHERE ");
+            for (String colName : whereConditions.keySet()) {
+                count += 1;
+                where.append(colName).append(" = ");
+                where.append(whereConditions.get(colName));
+                if (whereConditions.size() > count) {
+                    where.append(" AND ");
+                }
+            }
+        }
+
+        return query + where.toString();
+    }
+
+    private String getUpdateQuery(String tableName, ContentValues updateColumns, ContentValues whereConditions) {
+        String query = String.format("UPDATE %s SET ", tableName);
+        StringBuilder update = new StringBuilder();
+        StringBuilder where = new StringBuilder();
+        update.append("");
+
+        if (updateColumns != null) {
+            int count = 0;
+            for (String colName : updateColumns.keySet()) {
+                count += 1;
+                update.append(colName).append(" = ");
+                update.append(updateColumns.get(colName));
+                if (updateColumns.size() > count) {
+                    update.append(", ");
+                }
+            }
+        }
+
+        if (whereConditions != null) {
+            int count = 0;
+            where.append(" WHERE ");
+            for (String colName : whereConditions.keySet()) {
+                count += 1;
+                where.append(colName).append(" = ");
+                where.append(whereConditions.get(colName));
+                if (whereConditions.size() > count) {
+                    where.append(", ");
+                }
+            }
+        }
+
+        return  query + update.toString() + where.toString();
+    }
     //endregion
 }

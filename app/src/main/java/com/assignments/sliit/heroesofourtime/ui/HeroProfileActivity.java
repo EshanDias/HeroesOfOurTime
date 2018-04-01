@@ -1,6 +1,7 @@
 package com.assignments.sliit.heroesofourtime.ui;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -38,14 +39,18 @@ public class HeroProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hero_profile);
 
+        db = new DatabaseHelper(getApplicationContext());
         myContext = this.getApplicationContext();
         fab = findViewById(R.id.myFAB);
         TextView tv_Description = findViewById(R.id.textView_heroDescription);
+//        flag = db.checkFavouriteStatus(HeroId);
+//        setFavIcon(flag);
 
         tv_Description.setMovementMethod(new ScrollingMovementMethod());
 
         HeroId = getIntent().getIntExtra("HeroID", 0);
-        db = new DatabaseHelper(getApplicationContext());
+
+
 
         try {
             hero = db.getHeroByTag(HeroId);
@@ -85,17 +90,46 @@ public class HeroProfileActivity extends AppCompatActivity {
         tv_Age.setText(String.format("%s YEARS", String.valueOf(hero.CalculateAge())));
         tv_Summary.setText(hero.getSummary());
         tv_Description.setText(hero.getDescription());
+        setFavIcon(hero.isFavouriteStatus());
+    }
+
+    private void setFavIcon (boolean status) {
+        if(!status){
+            fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_favourite_gray));
+            flag = false;
+        } else {
+            fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_favourite_red));
+            flag = true;
+        }
     }
 
     public void addToFavourites() {
+        //TODO: save according to the user
         if(flag){
             fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_favourite_gray));
             flag = false;
             Toast.makeText(myContext, R.string.removeFavourite, Toast.LENGTH_SHORT).show();
+
+            ContentValues update = new ContentValues();
+            update.put("FavouriteStatus", 0);
+
+            ContentValues where = new ContentValues();
+            where.put("HeroID", HeroId);
+
+            db.updateHero(update,where);
+
         } else {
             fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_favourite_red));
             flag = true;
             Toast.makeText(myContext, R.string.addFavourite, Toast.LENGTH_SHORT).show();
+
+            ContentValues update = new ContentValues();
+            update.put("FavouriteStatus", 1);
+
+            ContentValues where = new ContentValues();
+            where.put("HeroID", HeroId);
+
+            db.updateHero(update,where);
         }
     }
 

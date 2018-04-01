@@ -20,7 +20,6 @@ public class Hero {
     private Date Death;
     private String Summary;
     private String Description;
-    private String Comments;
     private Date CreatedDate;
     private Date ModifiedDate;
     private Integer HeroImage;
@@ -35,7 +34,6 @@ public class Hero {
         Death = null;
         Summary = "";
         Description = "";
-        Comments = "";
         ModifiedDate = Calendar.getInstance().getTime();
         CreatedDate = Calendar.getInstance().getTime();
     }
@@ -46,7 +44,6 @@ public class Hero {
         Death = death;
         Summary = summary;
         Description = description;
-        Comments = "";
         ModifiedDate = Calendar.getInstance().getTime();
         CreatedDate = Calendar.getInstance().getTime();
         HeroImage = image;
@@ -98,14 +95,6 @@ public class Hero {
 
     public void setDescription(String description) {
         Description = description;
-    }
-
-    public String getComments() {
-        return Comments;
-    }
-
-    public void setComments(String comments) {
-        Comments = comments;
     }
 
     public Date getCreatedDate() {

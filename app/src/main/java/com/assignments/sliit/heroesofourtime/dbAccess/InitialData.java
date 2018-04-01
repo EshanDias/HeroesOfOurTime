@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.assignments.sliit.heroesofourtime.R;
 import com.assignments.sliit.heroesofourtime.model.Hero;
+import com.assignments.sliit.heroesofourtime.model.User;
+import com.assignments.sliit.heroesofourtime.model.UserHero;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,10 +18,7 @@ import java.util.List;
 
 public class InitialData {
 
-    private Context myContext;
-
     InitialData(Context context) {
-        myContext = context;
     }
 
     //region Heroes Data
@@ -180,4 +179,30 @@ public class InitialData {
 
     //endregion
 
+    //region User Data
+    public List<User> getInitialUsers(){
+        List<User> userList = new ArrayList<>();
+        User user;
+
+        //1
+        user = new User();
+        user.setName("Eshan Dias");
+        user.setEmail("eash_di@ymail.com");
+        user.setPassword("123456789");
+        user.setHint("123456789");
+
+        userList.add(user);
+
+        //2
+        user = new User();
+        user.setName("Pooja Withanage");
+        user.setEmail("pwithanage@gmail.com");
+        user.setPassword("123456789");
+        user.setHint("123456789");
+
+        userList.add(user);
+
+        return userList;
+    }
+    //endregion
 }

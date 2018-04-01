@@ -91,11 +91,11 @@ public class HeroProfileActivity extends AppCompatActivity {
         if(flag){
             fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_favourite_gray));
             flag = false;
-            Toast.makeText(myContext, "Removed From Favourites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(myContext, R.string.removeFavourite, Toast.LENGTH_SHORT).show();
         } else {
             fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_favourite_red));
             flag = true;
-            Toast.makeText(myContext, "Added To Favourites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(myContext, R.string.addFavourite, Toast.LENGTH_SHORT).show();
         }
     }
 

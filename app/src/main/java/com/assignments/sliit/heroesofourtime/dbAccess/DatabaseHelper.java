@@ -9,14 +9,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.assignments.sliit.heroesofourtime.core.ImageHelper;
 import com.assignments.sliit.heroesofourtime.model.Hero;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,7 +34,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Table Names
     private static final String TABLE_HERO = "Hero";
-    private static final String TABLE_LOGIN = "Login";
+    private static final String TABLE_USER = "User";
+    private static final String TABLE_USER_HERO = "User_Hero";
 
     //Columns - Hero Table
     private static final String HERO_ID = "HeroID";
@@ -45,46 +44,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String HERO_DEATH = "Death";
     private static final String HERO_SUMMARY = "Summary";
     private static final String HERO_DESCRIPTION = "Description";
-    private static final String HERO_COMMENTS = "Comments";
     private static final String HERO_CREATED_DATE = "CreatedDate";
     private static final String HERO_MODIFIED_DATE = "ModifiedDate";
     private static final String HERO_IMAGE = "HeroImage";
 
-    //Columns - Login Table
-    private static final String LOGIN_ID = "ID";
-    private static final String LOGIN_NAME = "Name";
-    private static final String LOGIN_EMAIL = "Email";
-    private static final String LOGIN_USERNAME = "Username";
-    private static final String LOGIN_PASSWORD = "Password";
-    private static final String LOGIN_HINT = "Hint";
-    private static final String LOGIN_CREATED_DATE = "CreatedDate";
-    private static final String LOGIN_MODIFIED_DATE = "ModifiedDate";
+    //Columns - User Table
+    private static final String USER_ID = "ID";
+    private static final String USER_NAME = "Name";
+    private static final String USER_EMAIL = "Email";
+    private static final String USER_USERNAME = "Username";
+    private static final String USER_PASSWORD = "Password";
+    private static final String USER_HINT = "Hint";
+    private static final String USER_CREATED_DATE = "CreatedDate";
+    private static final String USER_MODIFIED_DATE = "ModifiedDate";
+
+    //Columns - User Hero Table
+    private static final String USER_HERO_USER_ID = "UserID";
+    private static final String USER_HERO_HERO_ID = "HeroID";
+    private static final String USER_HERO_COMMENTS = "Comments";
+    private static final String USER_HERO_FAVOURITE_STATUS = "Favourite_Status";
 
     //Table Create Statements
     private static final String CREATE_TABLE_HERO = "CREATE TABLE " + TABLE_HERO + " ("
-            + HERO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "
-            + HERO_NAME + " TEXT" + ", "
-            + HERO_BIRTHDAY + " TEXT" + ", "
-            + HERO_DEATH + " TEXT" + ", "
-            + HERO_SUMMARY + " TEXT" + ", "
-            + HERO_DESCRIPTION + " TEXT" + ", "
-            + HERO_COMMENTS + " TEXT" + ", "
-            + HERO_CREATED_DATE + " TEXT" + ", "
-            + HERO_MODIFIED_DATE + " TEXT" + ", "
-            + HERO_IMAGE + " INTEGER"
+            + HERO_ID               + " INTEGER PRIMARY KEY AUTOINCREMENT"          + ", "
+            + HERO_NAME             + " TEXT"                                       + ", "
+            + HERO_BIRTHDAY         + " TEXT"                                       + ", "
+            + HERO_DEATH            + " TEXT"                                       + ", "
+            + HERO_SUMMARY          + " TEXT"                                       + ", "
+            + HERO_DESCRIPTION      + " TEXT"                                       + ", "
+            + HERO_CREATED_DATE     + " TEXT"                                       + ", "
+            + HERO_MODIFIED_DATE    + " TEXT"                                       + ", "
+            + HERO_IMAGE            + " INTEGER"
             + ")";
 
-    private static final String CREATE_TABLE_LOGIN = "CREATE TABLE " + TABLE_LOGIN + " ("
-            + LOGIN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "
-            + LOGIN_NAME + " TEXT" + ", "
-            + LOGIN_EMAIL + " TEXT" + ", "
-            + LOGIN_USERNAME + " TEXT" + ", "
-            + LOGIN_PASSWORD + " TEXT" + ", "
-            + LOGIN_HINT + " TEXT" + ", "
-            + LOGIN_CREATED_DATE + " TEXT" + ", "
-            + LOGIN_MODIFIED_DATE + " TEXT"
+    private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + " ("
+            + USER_ID               + " INTEGER PRIMARY KEY AUTOINCREMENT"          + ", "
+            + USER_NAME             + " TEXT"                                       + ", "
+            + USER_EMAIL            + " TEXT"                                       + ", "
+            + USER_USERNAME         + " TEXT"                                       + ", "
+            + USER_PASSWORD         + " TEXT"                                       + ", "
+            + USER_HINT             + " TEXT"                                       + ", "
+            + USER_CREATED_DATE     + " TEXT"                                       + ", "
+            + USER_MODIFIED_DATE    + " TEXT"
             + ")";
 
+    private static final String CREATE_TABLE_USER_HERO = "CREATE TABLE " + TABLE_USER_HERO + " ("
+            + USER_HERO_USER_ID               + " INTEGER PRIMARY KEY AUTOINCREMENT"   + ", "
+            + USER_HERO_HERO_ID               + " TEXT"                                + ", "
+            + USER_HERO_COMMENTS              + " TEXT"                                + ", "
+            + USER_HERO_FAVOURITE_STATUS      + " TEXT"                                + ", "
+            + USER_CREATED_DATE               + " TEXT"                                + ", "
+            + USER_MODIFIED_DATE              + " TEXT"
+            + ")";
     //endregion
 
     //region Database CRUD Operation Methods
@@ -96,7 +107,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_HERO);
-        db.execSQL(CREATE_TABLE_LOGIN);
+        db.execSQL(CREATE_TABLE_USER);
+        db.execSQL(CREATE_TABLE_USER_HERO);
 
         seedData(db);
     }
@@ -104,8 +116,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < newVersion) {
-            db.execSQL(String.format("DROP TABLE IF EXISTS %s", TABLE_LOGIN));
+            db.execSQL(String.format("DROP TABLE IF EXISTS %s", TABLE_USER));
             db.execSQL(String.format("DROP TABLE IF EXISTS %s", TABLE_HERO));
+            db.execSQL(String.format("DROP TABLE IF EXISTS %s", TABLE_USER_HERO));
         }
 
         onCreate(db);
@@ -143,7 +156,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         values.put(HERO_SUMMARY, hero.getSummary());
         values.put(HERO_DESCRIPTION, hero.getDescription());
-        values.put(HERO_COMMENTS, hero.getComments());
         values.put(HERO_MODIFIED_DATE, new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
         values.put(HERO_CREATED_DATE, new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
         values.put(HERO_IMAGE, hero.getHeroImage());
@@ -179,7 +191,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
             hero.setSummary(cur.getString(cur.getColumnIndex(HERO_SUMMARY)));
             hero.setDescription(cur.getString(cur.getColumnIndex(HERO_DESCRIPTION)));
-            hero.setComments(cur.getString(cur.getColumnIndex(HERO_COMMENTS)));
             hero.setModifiedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_MODIFIED_DATE))));
             hero.setCreatedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_CREATED_DATE))));
             hero.setHeroImage(cur.getInt(cur.getColumnIndex(HERO_IMAGE)));
@@ -215,7 +226,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }
                 hero.setSummary(cur.getString(cur.getColumnIndex(HERO_SUMMARY)));
                 hero.setDescription(cur.getString(cur.getColumnIndex(HERO_DESCRIPTION)));
-                hero.setComments(cur.getString(cur.getColumnIndex(HERO_COMMENTS)));
                 hero.setModifiedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_MODIFIED_DATE))));
                 hero.setCreatedDate(sdf.parse(cur.getString(cur.getColumnIndex(HERO_CREATED_DATE))));
                 hero.setHeroImage(cur.getInt(cur.getColumnIndex(HERO_IMAGE)));
